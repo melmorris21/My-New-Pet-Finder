@@ -6,8 +6,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-    <title>My New Homie Finder</title>
-    <h1>My New Homie Finder</h1>
+    <title>My New Pet Finder</title>
+    <h1>My New Pet Finder</h1>
          
          <FilterablePetTable pets={PETS} />
     </html>
