@@ -1,15 +1,15 @@
 'use client'
 import './globals.css'
 import React, {useState} from "react"
+import PETS from "./data"
 
 export default function RootLayout({
 }) {
   return (
     <html lang="en">
-    <title>My New Pet Finder</title>
-    <h1>My New Pet Finder</h1>
-         
-         <FilterablePetTable pets={PETS} />
+    <title>Adoptable Animals</title>
+    <h1>Adoptable Animals</h1>
+    <FilterablePetTable pets={PETS} />
     </html>
   )
 }
@@ -17,30 +17,21 @@ export default function RootLayout({
 function FilterablePetTable({ pets }) {
   const [filterText, setFilterText] = useState('');
   const [apartmentFriendly, setApartmentFriendly] = useState(false);
-  const [filterPet, setFilterPet] = useState('');
 
   return (
     <>
-    <div className="menu">
-      <h2>Filter</h2>
-      <button id="Dog">Dog</button>
-      <button id="Cat">Cat</button>
-      <button id="Fish">Fish</button>
-      <button id="Reptile">Reptile</button>
-      <button id="Rodent">Rodent</button>
-      <button id="Bird">Bird</button>
-    </div>
     <div>
       <SearchBar 
       filterText={filterText}
       apartmentFriendly={apartmentFriendly}
       onFilterTextChanges={setFilterText}
-      onApartmentFriendlyChange={setApartmentFriendly}/>
+      onApartmentFriendlyChange={setApartmentFriendly}
+      />
       <PetTable 
       pets={pets}
       filterText={filterText}
       apartmentFriendly={apartmentFriendly}
-      filterPet={filterPet}/>
+      />
     </div>
     </>
   );
@@ -50,8 +41,9 @@ function SearchBar({
   filterText,
   apartmentFriendly,
   onFilterTextChanges,
-  onApartmentFriendlyChange
-}) {
+  onApartmentFriendlyChange,
+
+  }) {
   return (
     <form>
       <input 
@@ -70,9 +62,8 @@ function SearchBar({
   );
 }
 
-function PetTable({ pets, filterText, apartmentFriendly, filterPet }){
+function PetTable({ pets, filterText, apartmentFriendly }){
   const rows = [];
-  let petType = null;
 
   pets.forEach((pet) => {
   if (
@@ -85,23 +76,13 @@ function PetTable({ pets, filterText, apartmentFriendly, filterPet }){
   if (apartmentFriendly && !pet.apartment){
     return;
   }
-  if (filterPet){
-    return;
-  }
-  
-    if (pet.type !== petType) {
-      rows.push(
-          <PetTypeRow
-          type={pet.type}
-          key={pet.type} />
-      );
-  }
+
   rows.push(
       <PetRow
       pet={pet}
-      key={pet.name} />
+      name={pet.name} />
   );
-  petType = pet.type;
+
   });
 
   return (
@@ -109,7 +90,7 @@ function PetTable({ pets, filterText, apartmentFriendly, filterPet }){
           <thead>
               <tr>
                   <th>Name</th>
-                  <th>Type</th>
+                  <th>Breed</th>
               </tr>
           </thead>
           <tbody>{rows}</tbody>
@@ -118,45 +99,11 @@ function PetTable({ pets, filterText, apartmentFriendly, filterPet }){
 }
 
 function PetRow({ pet }) {
-  const name = pet.apartment ? pet.name :
-    <span style={{ color: 'red' }}>
-      {pet.name}
-    </span>;
 
   return (
     <tr>
-      <td>{name}</td>
-      <td>{pet.type}</td>
+      <td>{pet.name}</td>
+      <td>{pet.breed}</td>
     </tr>
   );
 }
-
-function PetTypeRow({ type }) {
-  return (
-    <tr>
-      <th colSpan="2">
-      </th>
-    </tr>
-  );
-}
-
-const PETS = [
-  {name: "German Shepherd", type: "Dog", apartment: false},
-  {name: "Yorkie", type: "Dog", apartment: true},
-  {name: "Doodle", type: "Dog", apartment: true},
-  {name: "Great Dane", type: "Dog", apartment: false},
-  {name: "Gecko", type: "Reptile", apartment: true},
-  {name: "Bearded Dragon", type: "Reptile", apartment: true},
-  {name: "Python", type: "Reptile", apartment: false},
-  {name: "Beta Fish", type: "Fish", apartment: true},
-  {name: "Shark", type: "Fish", apartment: false},
-  {name: "Goldfish", type: "Fish", apartment: true},
-  {name: "Parakeet", type: "Bird", apartment: true},
-  {name: "Parrot", type: "Bird", apartment: false},
-  {name: "Tabby", type: "Cat", apartment: true},
-  {name: "Bengal", type: "Cat", apartment: true},
-  {name: "Lynx", type: "Cat", apartment: false},
-  {name: "Hamster", type: "Rodent", apartment: true},
-  {name: "Guinea Pig", type: "Rodent", apartment: true},
-  {name: "Chinchilla", type: "Rodent", apartment: true}
-]
